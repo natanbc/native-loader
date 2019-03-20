@@ -53,6 +53,7 @@ def CURRENT_ARCH = ARCHITECTURE_REPLACEMENTS.getOrDefault(SYSTEM_ARCH, SYSTEM_AR
 
 model {
     toolChains {
+        visualCpp(VisualCpp) {}
         gcc(Gcc){
             target("arm_linux") {
                 cCompiler.executable 'arm-linux-gnueabihf-' + cCompiler.executable
