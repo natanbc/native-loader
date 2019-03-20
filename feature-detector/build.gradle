@@ -1,0 +1,225 @@
+/*
+ * Copyright 2018 natanbc
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+plugins {
+    id 'cpp'
+    id 'c'
+}
+
+import org.apache.tools.ant.taskdefs.condition.Os
+
+def ARCHITECTURE_REPLACEMENTS = [
+        amd64: "x64"
+]
+
+def RESOURCES_LOCATION = [
+        x64_win: "win-x86-64",
+        x86_win: "win-x86",
+        x64_linux: "linux-x86-64",
+        x86_linux: "linux-x86",
+        arm_linux: "linux-arm",
+        aarch64_linux: "linux-aarch64",
+        x64_darwin: "darwin"
+]
+
+def SOURCE_FILES = [
+        x64_win: "cpuinfo_x86.c",
+        x86_win: "cpuinfo_x86.c",
+        x64_linux: "cpuinfo_x86.c",
+        x86_linux: "cpuinfo_x86.c",
+        x64_darwin: "cpuinfo_x86.c",
+        arm_linux: "cpuinfo_arm.c",
+        aarch64_linux: "cpuinfo_aarch64.c"
+]
+
+def BASE_JNI_INCLUDE_DIR = System.getenv('JAVA_HOME') + '/include'
+def OS_JNI_INCLUDE_DIR = BASE_JNI_INCLUDE_DIR + '/' + (Os.isFamily(Os.FAMILY_WINDOWS) ? 'win32' : Os.isFamily(Os.FAMILY_MAC) ? 'darwin' : 'linux')
+def CURRENT_PLATFORM = Os.isFamily(Os.FAMILY_WINDOWS) ? 'win' : Os.isFamily(Os.FAMILY_MAC) ? 'darwin' : 'linux'
+def SYSTEM_ARCH = System.properties['os.arch'].toLowerCase()
+def CURRENT_ARCH = ARCHITECTURE_REPLACEMENTS.getOrDefault(SYSTEM_ARCH, SYSTEM_ARCH)
+
+model {
+    toolChains {
+        gcc(Gcc){
+            target("arm_linux") {
+                cCompiler.executable 'arm-linux-gnueabihf-' + cCompiler.executable
+                cppCompiler.executable 'arm-linux-gnueabihf-' + cppCompiler.executable
+                linker.executable 'arm-linux-gnueabihf-' + linker.executable
+            }
+            target("aarch64_linux") {
+                cCompiler.executable 'aarch64-linux-gnu-' + cCompiler.executable
+                cppCompiler.executable 'aarch64-linux-gnu-' + cppCompiler.executable
+                linker.executable 'aarch64-linux-gnu-' + linker.executable
+            }
+            target("x64_darwin") {
+                cCompiler.executable 'x86_64-apple-darwin15-' + cCompiler.executable
+                cppCompiler.executable 'x86_64-apple-darwin15-' + cppCompiler.executable
+                linker.executable 'x86_64-apple-darwin15-' + linker.executable
+                linker.withArguments { args ->
+                    args.remove '-Wl,-soname,libdetector.so'
+                    args << '-Wl,-install_name,libdetector.so'
+                }
+            }
+        }
+    }
+    platforms {
+        x86_win {
+            architecture "x86"
+            operatingSystem "windows"
+        }
+        x86_linux {
+            architecture "x86"
+            operatingSystem "linux"
+        }
+        x64_win {
+            architecture "x86_64"
+            operatingSystem "windows"
+        }
+        x64_linux {
+            architecture "x86_64"
+            operatingSystem "linux"
+        }
+        x64_darwin {
+            architecture "x86_64"
+            operatingSystem "mac"
+        }
+        arm_linux {
+            architecture "arm"
+            operatingSystem "linux"
+        }
+        aarch64_linux {
+            architecture "arm64"
+            operatingSystem "linux"
+        }
+    }
+    repositories {
+        libs(PrebuiltLibraries) {
+            jni {
+                headers.srcDirs BASE_JNI_INCLUDE_DIR, OS_JNI_INCLUDE_DIR
+            }
+        }
+    }
+    //noinspection GroovyAssignabilityCheck
+    components {
+        detector(NativeLibrarySpec) {
+            targetPlatform "x86_win"
+            targetPlatform "x86_linux"
+            targetPlatform "x64_win"
+            targetPlatform "x64_linux"
+            targetPlatform "x64_darwin"
+            targetPlatform "arm_linux"
+            targetPlatform "aarch64_linux"
+            sources {
+                cpp {
+                    source {
+                        srcDir "src/main/cpp"
+                        include "**/*.cpp"
+                    }
+                    exportedHeaders {
+                        srcDir "cpu_features/include"
+                    }
+                }
+            }
+            binaries.all {
+                cCompiler.define "STACK_LINE_READER_BUFFER_SIZE", "1024"
+                cCompiler.define "HAVE_STRONG_GETAUXVAL"
+                def platform = it.targetPlatform.name
+                def file = SOURCE_FILES.get(platform)
+                def unix = !platform.contains("win")
+                def x86 = platform.contains("x86") || platform.contains("x64")
+                sources {
+                    c(CSourceSet) {
+                        source {
+                            srcDir "cpu_features/src"
+                            include file, "filesystem.c", "string_view.c", "stack_line_reader.c"
+                            if(unix && !x86) {
+                                include "unix_features_aggregator.c", "hwcaps.c"
+                            }
+                        }
+                        exportedHeaders {
+                            srcDir "cpu_features/include"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    binaries {
+        all {
+            cppCompiler.args '-std=c++17'
+            lib library: 'jni', linkage: 'api'
+
+            if(toolChain in VisualCpp) {
+                cppCompiler.args "/Ox"
+                cCompiler.args "/Ox"
+            } else if(toolChain in Gcc) {
+                cppCompiler.args "-O3"
+                cCompiler.args "-O3"
+            }
+        }
+    }
+}
+
+task buildCurrentArch {}
+
+task buildWin64 {}
+task buildWin32 {}
+task buildLinux64 {}
+task buildLinux32 {}
+task buildLinuxArm {}
+task buildLinuxAarch64 {}
+task buildDarwin {}
+
+task buildWin {
+    dependsOn buildWin64, buildWin32
+}
+
+task buildLinux {
+    dependsOn buildLinux64, buildLinux32, buildLinuxArm, buildLinuxAarch64
+}
+
+tasks.withType(LinkSharedLibrary) {
+    def file = it.linkedFile.asFile.orNull
+    def filename = file.getName()
+    def arch = RESOURCES_LOCATION.get(file.getParentFile().getName())
+    def newPath = new File(rootProject.projectDir, "src/main/resources/natives/" + arch + "/" + filename).getAbsoluteFile()
+    newPath.getParentFile().mkdirs()
+    it.linkedFile.set(newPath)
+    if(it.name.toLowerCase().contains(CURRENT_ARCH + "_" + CURRENT_PLATFORM)) {
+        buildCurrentArch.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("x64_win")) {
+        buildWin64.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("x86_win")) {
+        buildWin32.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("x64_linux")) {
+        buildLinux64.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("x86_linux")) {
+        buildLinux32.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("arm_linux")) {
+        buildLinuxArm.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("aarch64_linux")) {
+        buildLinuxAarch64.dependsOn it
+    }
+    if(it.name.toLowerCase().contains("x64_darwin")) {
+        buildDarwin.dependsOn it
+    }
+}

@@ -1,0 +1,3 @@
+[submodule "feature-detector/cpu_features"]
+	path = feature-detector/cpu_features
+	url = https://github.com/natanbc/cpu_features

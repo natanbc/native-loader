@@ -1,0 +1,90 @@
+plugins {
+    id 'java-library'
+    id 'maven'
+    id 'maven-publish'
+    id 'com.jfrog.bintray' version '1.8.4'
+}
+
+def versionObj = new Version(major: 0, minor: 1, revision: 0)
+
+archivesBaseName = 'native-loader'
+group 'com.github.natanbc'
+version "${versionObj}"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        BintrayRelease(MavenPublication) {
+            from components.java
+            groupId 'com.github.natanbc'
+            artifactId 'native-loader'
+
+            artifact sourceJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintray {
+    version = project.version
+    user = getProjectProperty("BINTRAY_USERNAME")
+    key = getProjectProperty("BINTRAY_API_KEY")
+    publications = ["BintrayRelease"]
+    pkg {
+        repo = 'maven'
+        name = 'native-loader'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/natanbc/native-loader.git'
+        publish = true
+        version {
+            name = project.version.toString()
+            released = new Date()
+        }
+    }
+}
+
+String getProjectProperty(String propertyName) {
+    String property;
+    if(hasProperty(propertyName)) {
+        property = project.properties[propertyName]
+    } else {
+        property = System.getenv(propertyName) ?: ""
+    }
+    return property
+}
+
+bintrayUpload {
+    dependsOn build
+
+    onlyIf { !getProjectProperty("BINTRAY_USERNAME").empty }
+    onlyIf { !getProjectProperty("BINTRAY_API_KEY").empty }
+}
+
+class Version {
+    String major, minor, revision
+
+    String toString() {
+        "$major.$minor.$revision"
+    }
+}
