@@ -29,7 +29,7 @@ public class NativeLibLoader {
     private final NativeLibraryProperties properties;
     private final LibraryBinaryLoader loader;
     private final String baseName;
-    private volatile RuntimeException previousFailure;
+    private volatile Throwable previousFailure;
     private volatile Boolean previousResult;
     private Predicate<SystemType> systemFilter;
     
@@ -75,9 +75,9 @@ public class NativeLibLoader {
                     } catch(Throwable e) {
                         log.error("Native library {}: loading failed.", e);
                         
-                        previousFailure = new RuntimeException(e);
+                        previousFailure = e;
                         previousResult = false;
-                        throw previousFailure;
+                        throw uncheck(e);
                     }
                     return;
                 }
@@ -85,7 +85,7 @@ public class NativeLibLoader {
         }
         
         if(!result) {
-            throw previousFailure;
+            throw uncheck(previousFailure);
         }
     }
     
@@ -171,7 +171,7 @@ public class NativeLibLoader {
             
             return extractedLibraryPath;
         } catch(IOException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
     
@@ -272,5 +272,9 @@ public class NativeLibLoader {
             return "Part{feature=" + (feature.getCPUType().name() + "." + feature.getName())
                     + ", part=" + part + "}";
         }
+    }
+
+    private static <E extends Throwable> RuntimeException uncheck(Throwable e) throws E {
+        throw (E) e;
     }
 }
