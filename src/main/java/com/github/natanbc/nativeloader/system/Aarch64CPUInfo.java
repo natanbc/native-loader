@@ -1,6 +1,7 @@
 package com.github.natanbc.nativeloader.system;
 
 import javax.annotation.CheckReturnValue;
+import java.util.Map;
 
 public class Aarch64CPUInfo extends CPUInfo {
     private final int implementer;
@@ -8,8 +9,8 @@ public class Aarch64CPUInfo extends CPUInfo {
     private final int part;
     private final int revision;
     
-    public Aarch64CPUInfo(long featureBits, int implementer, int variant, int part, int revision) {
-        super(DefaultArchitectureTypes.ARMv8_64, featureBits);
+    public Aarch64CPUInfo(Map<String, Boolean> features, int implementer, int variant, int part, int revision) {
+        super(DefaultArchitectureTypes.ARMv8_64, features);
         this.implementer = implementer;
         this.variant = variant;
         this.part = part;
@@ -38,7 +39,8 @@ public class Aarch64CPUInfo extends CPUInfo {
     
     @Override
     public String toString() {
-        return "Aarch64CPU{features = " + getFeatureBits() + ", implementer = " + getImplementer() +
-                ", variant = " + getVariant() + ", part = " + getPart() + ", revision = " + getRevision() + "}";
+        return "Aarch64CPU{features = " + FeatureFormatter.formatFeatures(this) +
+                ", implementer = " + getImplementer() + ", variant = " + getVariant() +
+                ", part = " + getPart() + ", revision = " + getRevision() + "}";
     }
 }

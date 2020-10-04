@@ -11,13 +11,19 @@ import com.github.natanbc.nativeloader.system.X86Microarchitecture;
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 
 class Natives {
     private static native int arch();
     
-    private static native long featureBits();
+    private static native int featureCount();
     
-    private static native int x86Microarchitecture();
+    private static native boolean hasFeature(int feature);
+    
+    private static native String featureName(int feature);
+    
+    private static native String x86Microarchitecture();
     
     private static native int x86Family();
     
@@ -53,7 +59,10 @@ class Natives {
     @Nonnull
     static CPUInfo createSystemInfo() {
         CPUType arch = CPUType.values()[arch() - 1];
-        long feature = featureBits();
+        Map<String, Boolean> features = new HashMap<>();
+        for(int i = 0, j = featureCount(); i < j; i++) {
+            features.put(featureName(i), hasFeature(i));
+        }
         switch(arch) {
             case X86: //x86
                 boolean is64Bit = DefaultArchitectureTypes.detect() == DefaultArchitectureTypes.X86_64;
@@ -62,18 +71,18 @@ class Natives {
                 x86Vendor(vendor, 0);
                 x86BrandString(brandString, 0);
                 return new X86CPUInfo(
-                        is64Bit, feature, X86Microarchitecture.values()[x86Microarchitecture()],
+                        is64Bit, features, X86Microarchitecture.fromNative(x86Microarchitecture()),
                         x86Family(), x86Model(), x86Stepping(), fromCString(vendor),
                         fromCString(brandString)
                 );
             case ARM:
                 return new ArmCPUInfo(
-                        feature, armCpuId(), armImplementer(), armArchitecture(),
+                        features, armCpuId(), armImplementer(), armArchitecture(),
                         armVariant(), armPart(), armRevision()
                 );
             case AARCH64:
                 return new Aarch64CPUInfo(
-                        feature, aarch64Implementer(), aarch64Variant(),
+                        features, aarch64Implementer(), aarch64Variant(),
                         aarch64Part(), aarch64Revision()
                 );
             default:

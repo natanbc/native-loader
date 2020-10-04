@@ -73,7 +73,7 @@ public class NativeLibLoader {
                         load0();
                         previousResult = true;
                     } catch(Throwable e) {
-                        log.error("Native library {}: loading failed.", e);
+                        log.error("Native library {}: loading failed.", baseName, e);
                         
                         previousFailure = e;
                         previousResult = false;
@@ -120,7 +120,7 @@ public class NativeLibLoader {
             systemType = SystemType.detect();
         } catch(IllegalArgumentException e) {
             if(systemFilter != null) {
-                log.info("Native library {}: could not detect sytem type, but system filter is present - assuming it does " +
+                log.info("Native library {}: could not detect system type, but system filter is present - assuming it does " +
                         "not match and skipping library.", baseName);
                 
                 return null;
@@ -148,8 +148,10 @@ public class NativeLibLoader {
         StringBuilder libraryNameBuilder = new StringBuilder(baseName);
         for(OptionalPart part : parts) {
             CPUInfo info = DetectorLoader.loadDetector(loader);
-            if(part.feature.getCPUType() == info.getArch().cpuType() && (info.getFeatureBits() & part.feature.getMask()) != 0) {
-                libraryNameBuilder.append('-').append(part.part);
+            if(part.feature.getCPUType() == info.getArch().cpuType()) {
+                if(info.getFeatures().getOrDefault(part.feature.getNativeName(), false)) {
+                    libraryNameBuilder.append('-').append(part.part);
+                }
             }
         }
         String libraryName = libraryNameBuilder.toString();
@@ -274,6 +276,7 @@ public class NativeLibLoader {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static <E extends Throwable> RuntimeException uncheck(Throwable e) throws E {
         throw (E) e;
     }

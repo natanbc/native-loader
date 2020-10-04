@@ -1,6 +1,7 @@
 package com.github.natanbc.nativeloader.system;
 
 import javax.annotation.CheckReturnValue;
+import java.util.Map;
 
 public class ArmCPUInfo extends CPUInfo {
     private final int cpuId;
@@ -10,9 +11,9 @@ public class ArmCPUInfo extends CPUInfo {
     private final int part;
     private final int revision;
     
-    public ArmCPUInfo(long featureBits, int cpuId, int implementer, int architecture,
+    public ArmCPUInfo(Map<String, Boolean> features, int cpuId, int implementer, int architecture,
                       int variant, int part, int revision) {
-        super(DefaultArchitectureTypes.ARM, featureBits);
+        super(DefaultArchitectureTypes.ARM, features);
         this.cpuId = cpuId;
         this.implementer = implementer;
         this.architecture = architecture;
@@ -53,8 +54,8 @@ public class ArmCPUInfo extends CPUInfo {
     
     @Override
     public String toString() {
-        return "ArmCPU{features = " + getFeatureBits() + ", cpuId = " + getCpuId() + ", implementer = " + getImplementer() +
-                ", architecture = " + getArchitecture() + ", variant = " + getVariant() + ", part = " + getPart() +
-                ", revision = " + getRevision() + "}";
+        return "ArmCPU{features = " + FeatureFormatter.formatFeatures(this) + ", cpuId = " + getCpuId() +
+                ", implementer = " + getImplementer() + ", architecture = " + getArchitecture() +
+                ", variant = " + getVariant() + ", part = " + getPart() + ", revision = " + getRevision() + "}";
     }
 }

@@ -2,6 +2,7 @@ package com.github.natanbc.nativeloader.system;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import java.util.Map;
 
 public class X86CPUInfo extends CPUInfo {
     private final X86Microarchitecture microarchitecture;
@@ -11,9 +12,9 @@ public class X86CPUInfo extends CPUInfo {
     private final String vendor;
     private final String brandString;
     
-    public X86CPUInfo(boolean is64Bit, long featureBits, @Nonnull X86Microarchitecture microarchitecture,
+    public X86CPUInfo(boolean is64Bit, Map<String, Boolean> features, @Nonnull X86Microarchitecture microarchitecture,
                       int family, int model, int stepping, @Nonnull String vendor, @Nonnull String brandString) {
-        super(is64Bit ? DefaultArchitectureTypes.X86_64 : DefaultArchitectureTypes.X86_32, featureBits);
+        super(is64Bit ? DefaultArchitectureTypes.X86_64 : DefaultArchitectureTypes.X86_32, features);
         this.microarchitecture = microarchitecture;
         this.family = family;
         this.model = model;
@@ -57,8 +58,9 @@ public class X86CPUInfo extends CPUInfo {
     
     @Override
     public String toString() {
-        return "X86CPU{features = " + getFeatureBits() + ", microarchitecture = " + getMicroarchitecture() +
-                ", family = " + getFamily() + ", model = " + getModel() + ", stepping = " + getStepping() +
-                ", vendor = " + getVendor() + ", brandString = " + getBrandString() + "}";
+        return "X86CPU{features = " + FeatureFormatter.formatFeatures(this) +
+                ", microarchitecture = " + getMicroarchitecture() + ", family = " + getFamily() +
+                ", model = " + getModel() + ", stepping = " + getStepping() + ", vendor = " + getVendor() +
+                ", brandString = " + getBrandString() + "}";
     }
 }

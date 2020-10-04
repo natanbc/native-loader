@@ -12,6 +12,6 @@ public interface CPUFeature {
     @Nonnull
     String getName();
     
-    @Nonnegative
-    int getMask();
+    @Nonnull
+    String getNativeName();
 }

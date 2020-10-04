@@ -6,7 +6,24 @@ import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 public enum Aarch64Feature implements CPUFeature {
-    FP, ASIMD, AES, PMULL, SHA1, SHA2, CRC32;
+    AES, ASIMD, ASIMDDP, ASIMDFHM, ASIMDHP, ASIMDRDM,
+    ATOMICS, BF16, BTI, CPUID, CRC32, DCPODP, DCPOP,
+    DGH, DIT, EVTSTRM, FCMA, FLAGM, FLAGM2, FP,
+    FPHP, FRINT, I8MM, ILRCPC, JSCVT, LRCPC, PACA,
+    PACG, PMULL, RNG, SB, SHA1, SHA2, SHA3, SHA512,
+    SM3, SM4, SSBS, SVE, SVE2, SVEAES, SVEBF16,
+    SVEBITPERM, SVEF32MM, SVEF64MM, SVEI8MM,
+    SVEPMULL, SVESHA3, SVESM4, USCAT;
+    
+    private final String nativeName;
+    
+    Aarch64Feature(String nativeName) {
+        this.nativeName = nativeName == null ? name().toLowerCase() : nativeName;
+    }
+    
+    Aarch64Feature() {
+        this(null);
+    }
     
     @Override
     @Nonnull
@@ -20,10 +37,9 @@ public enum Aarch64Feature implements CPUFeature {
         return name();
     }
     
+    @Nonnull
     @Override
-    @Nonnegative
-    public int getMask() {
-        return 1 << ordinal();
+    public String getNativeName() {
+        return nativeName;
     }
-    
 }

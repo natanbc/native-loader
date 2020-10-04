@@ -5,74 +5,71 @@
 
 #ifdef CPU_FEATURES_ARCH_X86
   #include "cpuinfo_x86.h"
-  #define ARCH 1
+  using FeatureEnum = cpu_features::X86FeaturesEnum;
+  const auto arch = 1;
+  const auto featureCount = cpu_features::X86_LAST_;
   const auto info = cpu_features::GetX86Info();
   const auto features = info.features;
+  inline jboolean feature_check(jint feature) {
+    return cpu_features::GetX86FeaturesEnumValue(&features, static_cast<FeatureEnum>(feature));
+  }
+  inline const char* feature_name(jint feature) {
+    return cpu_features::GetX86FeaturesEnumName(static_cast<FeatureEnum>(feature));
+  }
 #endif
 
 #ifdef CPU_FEATURES_ARCH_ARM
   #include "cpuinfo_arm.h"
-  #define ARCH 2
+  using FeatureEnum = cpu_features::ArmFeaturesEnum;
+  const auto arch = 2;
+  const auto featureCount = cpu_features::ARM_LAST_;
   const auto info = cpu_features::GetArmInfo();
   const auto features = info.features;
+  inline jboolean feature_check(jint feature) {
+    return cpu_features::GetArmFeaturesEnumValue(&features, static_cast<FeatureEnum>(feature));
+  }
+  inline const char* feature_name(jint feature) {
+    return cpu_features::GetArmFeaturesEnumName(static_cast<FeatureEnum>(feature));
+  }
 #endif
 
 #ifdef CPU_FEATURES_ARCH_AARCH64
   #include "cpuinfo_aarch64.h"
-  #define ARCH 3
+  using FeatureEnum = cpu_features::Aarch64FeaturesEnum;
+  const auto arch = 3;
+  const auto featureCount = cpu_features::AARCH64_LAST_;
   const auto info = cpu_features::GetAarch64Info();
   const auto features = info.features;
+  inline jboolean feature_check(jint feature) {
+    return cpu_features::GetAarch64FeaturesEnumValue(&features, static_cast<FeatureEnum>(feature));
+  }
+  inline const char* feature_name(jint feature) {
+    return cpu_features::GetAarch64FeaturesEnumName(static_cast<FeatureEnum>(feature));
+  }
 #endif
 
 extern "C" {
 
 JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_arch(JNIEnv* env, jclass thiz) {
-    return ARCH;
+    return arch;
+}
+
+JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_featureCount(JNIEnv* env, jclass thiz) {
+    return featureCount;
+}
+
+JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_Natives_hasFeature(JNIEnv* env, jclass thiz, jint value) {
+    return feature_check(value);
+}
+
+JNIEXPORT jstring JNICALL Java_com_github_natanbc_nativeloader_Natives_featureName(JNIEnv* env, jclass thiz, jint value) {
+    return env->NewStringUTF(feature_name(value));
 }
 
 #ifdef CPU_FEATURES_ARCH_X86
-  JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_Natives_featureBits(JNIEnv* env, jclass thiz) {
-      jlong result = 0;
-      jlong offset = 0;
-      result |= (((uint64_t)features.aes & 1) << offset); offset++;
-      result |= (((uint64_t)features.erms & 1) << offset); offset++;
-      result |= (((uint64_t)features.f16c & 1) << offset); offset++;
-      result |= (((uint64_t)features.fma3 & 1) << offset); offset++;
-      result |= (((uint64_t)features.vpclmulqdq & 1) << offset); offset++;
-      result |= (((uint64_t)features.bmi1 & 1) << offset); offset++;
-      result |= (((uint64_t)features.bmi2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.ssse3 & 1) << offset); offset++;
-      result |= (((uint64_t)features.sse4_1 & 1) << offset); offset++;
-      result |= (((uint64_t)features.sse4_2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512f & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512cd & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512er & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512pf & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512bw & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512dq & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512vl & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512ifma & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512vbmi & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512vbmi2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512vnni & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512bitalg & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512vpopcntdq & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512_4vnniw & 1) << offset); offset++;
-      result |= (((uint64_t)features.avx512_4vbmi2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.smx & 1) << offset); offset++;
-      result |= (((uint64_t)features.sgx & 1) << offset); offset++;
-      result |= (((uint64_t)features.cx16 & 1) << offset); offset++;
-      result |= (((uint64_t)features.sha & 1) << offset); offset++;
-      result |= (((uint64_t)features.popcnt & 1) << offset); offset++;
-      result |= (((uint64_t)features.movbe & 1) << offset); offset++;
-      result |= (((uint64_t)features.rdrnd & 1) << offset); //offset++;
-      return result;
-  }
-
-  JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_x86Microarchitecture(JNIEnv* env, jclass thiz) {
-      return cpu_features::GetX86Microarchitecture(&info);
+  JNIEXPORT jstring JNICALL Java_com_github_natanbc_nativeloader_Natives_x86Microarchitecture(JNIEnv* env, jclass thiz) {
+      const char* name = cpu_features::GetX86MicroarchitectureName(cpu_features::GetX86Microarchitecture(&info));
+      return env->NewStringUTF(name);
   }
 
   JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_x86Family(JNIEnv* env, jclass thiz) {
@@ -99,25 +96,6 @@ JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_arch(JNIEnv*
 #endif
 
 #ifdef CPU_FEATURES_ARCH_ARM
-  JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_Natives_featureBits(JNIEnv* env, jclass thiz) {
-      jlong result = 0;
-      jlong offset = 0;
-      result |= (((uint64_t)features.vfp & 1) << offset); offset++;
-      result |= (((uint64_t)features.iwmmxt & 1) << offset); offset++;
-      result |= (((uint64_t)features.neon & 1) << offset); offset++;
-      result |= (((uint64_t)features.vfpv3 & 1) << offset); offset++;
-      result |= (((uint64_t)features.vfpv3d16 & 1) << offset); offset++;
-      result |= (((uint64_t)features.vfpv4 & 1) << offset); offset++;
-      result |= (((uint64_t)features.idiva & 1) << offset); offset++;
-      result |= (((uint64_t)features.idivt & 1) << offset); offset++;
-      result |= (((uint64_t)features.aes & 1) << offset); offset++;
-      result |= (((uint64_t)features.pmull & 1) << offset); offset++;
-      result |= (((uint64_t)features.sha1 & 1) << offset); offset++;
-      result |= (((uint64_t)features.sha2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.crc32 & 1) << offset); //offset++;
-      return result;
-  }
-
   JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_armCpuId(JNIEnv* env, jclass thiz) {
       return (jint)cpu_features::GetArmCpuId(&info);
   }
@@ -144,20 +122,6 @@ JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_arch(JNIEnv*
 #endif
 
 #ifdef CPU_FEATURES_ARCH_AARCH64
-
-  JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_Natives_featureBits(JNIEnv* env, jclass thiz) {
-      jlong result = 0;
-      jlong offset = 0;
-      result |= (((uint64_t)features.fp & 1) << offset); offset++;
-      result |= (((uint64_t)features.asimd & 1) << offset); offset++;
-      result |= (((uint64_t)features.aes & 1) << offset); offset++;
-      result |= (((uint64_t)features.pmull & 1) << offset); offset++;
-      result |= (((uint64_t)features.sha1 & 1) << offset); offset++;
-      result |= (((uint64_t)features.sha2 & 1) << offset); offset++;
-      result |= (((uint64_t)features.crc32 & 1) << offset); //offset++;
-      return result;
-  }
-
   JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_aarch64Implementer(JNIEnv* env, jclass thiz) {
       return info.implementer;
   }

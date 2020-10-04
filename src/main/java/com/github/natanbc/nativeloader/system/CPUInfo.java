@@ -2,14 +2,16 @@ package com.github.natanbc.nativeloader.system;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
+import java.util.Collections;
+import java.util.Map;
 
 public class CPUInfo {
     private final ArchitectureType arch;
-    private final long featureBits;
+    private final Map<String, Boolean> features;
     
-    public CPUInfo(@Nonnull ArchitectureType arch, long featureBits) {
+    public CPUInfo(@Nonnull ArchitectureType arch, Map<String, Boolean> features) {
         this.arch = arch;
-        this.featureBits = featureBits;
+        this.features = Collections.unmodifiableMap(features);
     }
     
     @Nonnull
@@ -19,7 +21,7 @@ public class CPUInfo {
     }
     
     @CheckReturnValue
-    public long getFeatureBits() {
-        return featureBits;
+    public Map<String, Boolean> getFeatures() {
+        return features;
     }
 }
