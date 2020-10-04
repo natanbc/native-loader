@@ -54,6 +54,7 @@ def CURRENT_ARCH = ARCHITECTURE_REPLACEMENTS.getOrDefault(SYSTEM_ARCH, SYSTEM_AR
 model {
     toolChains {
         visualCpp(VisualCpp) {}
+        clang(Clang) {}
         gcc(Gcc){
             target("arm_linux") {
                 cCompiler.executable 'arm-linux-gnueabihf-' + cCompiler.executable
@@ -166,7 +167,7 @@ model {
             if(toolChain in VisualCpp) {
                 cppCompiler.args "/Ox"
                 cCompiler.args "/Ox"
-            } else if(toolChain in Gcc) {
+            } else if(toolChain in Gcc || toolChain in Clang) {
                 cppCompiler.args "-O3"
                 cCompiler.args "-O3"
             }

@@ -38,12 +38,6 @@ public enum X86Feature implements CPUFeature {
     
     @Nonnull
     @Override
-    public String getName() {
-        return name();
-    }
-    
-    @Nonnull
-    @Override
     public String getNativeName() {
         return nativeName;
     }

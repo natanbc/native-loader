@@ -42,7 +42,7 @@ public class NativeLibLoader {
     @Nonnull
     @CheckReturnValue
     public NativeLibLoader withFeature(@Nonnull CPUFeature feature) {
-        return withFeature(feature, feature.getName().toLowerCase());
+        return withFeature(feature, feature.getNativeName().toLowerCase());
     }
     
     @Nonnull
@@ -271,7 +271,7 @@ public class NativeLibLoader {
         
         @Override
         public String toString() {
-            return "Part{feature=" + (feature.getCPUType().name() + "." + feature.getName())
+            return "Part{feature=" + (feature.getCPUType().name() + "." + feature.getNativeName())
                     + ", part=" + part + "}";
         }
     }
