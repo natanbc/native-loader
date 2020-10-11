@@ -117,7 +117,7 @@ public class NativeLibLoader {
         SystemType systemType;
         
         try {
-            systemType = SystemType.detect();
+            systemType = SystemType.detect(properties);
         } catch(IllegalArgumentException e) {
             if(systemFilter != null) {
                 log.info("Native library {}: could not detect system type, but system filter is present - assuming it does " +

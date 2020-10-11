@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public enum DefaultArchitectureTypes implements ArchitectureType {
     ARM("arm", Arrays.asList("arm", "armeabi", "armv7b", "armv7l"), CPUType.ARM),
@@ -24,7 +25,7 @@ public enum DefaultArchitectureTypes implements ArchitectureType {
     X86_32("x86", Arrays.asList("x86", "i386", "i486", "i586", "i686"), CPUType.X86),
     X86_64("x86-64", Arrays.asList("x86_64", "amd64"), CPUType.X86);
     
-    private static Map<String, ArchitectureType> aliasMap = createAliasMap();
+    private static final Map<String, ArchitectureType> ALIAS_MAP = createAliasMap();
     public final String identifier;
     public final List<String> aliases;
     public final CPUType cpuType;
@@ -46,20 +47,20 @@ public enum DefaultArchitectureTypes implements ArchitectureType {
     }
     
     public static ArchitectureType detect() {
-        String architectureName = System.getProperty("os.arch");
-        ArchitectureType type = aliasMap.get(architectureName);
-        
-        if(type == null) {
-            throw new IllegalArgumentException("Unknown architecture: " + architectureName);
-        }
-        
-        return type;
+        String arch = System.getProperty("os.arch");
+        return parse(arch)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown architecture: " + arch));
+    }
+    
+    public static Optional<ArchitectureType> parse(String name) {
+        return Optional.ofNullable(ALIAS_MAP.get(name));
     }
     
     private static Map<String, ArchitectureType> createAliasMap() {
         Map<String, ArchitectureType> aliases = new HashMap<>();
         
         for(DefaultArchitectureTypes value : values()) {
+            aliases.put(value.name().toLowerCase(), value);
             for(String alias : value.aliases) {
                 aliases.put(alias, value);
             }

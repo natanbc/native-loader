@@ -29,22 +29,26 @@ public interface NativeLibraryProperties {
     String getExtractionPath();
     
     /**
-     * @return System name. If this is set, no operating system or architecture detection is performed.
+     * @return System name. If this is set, no operating system detection is performed.
      */
-    String getSystemName();
+    String getOperatingSystemName();
     
     /**
-     * @return Library file name prefix to use. Only used when {@link #getSystemName()} is provided.
+     * @return Library file name prefix to use.
+     *         Only used when {@link #getOperatingSystemName()} is provided and doesn't
+     *         match a default OS.
      */
     String getLibraryFileNamePrefix();
     
     /**
-     * @return Library file name suffix to use. Only used when {@link #getSystemName()} is provided.
+     * @return Library file name suffix to use.
+     *         Only used when {@link #getOperatingSystemName()} is provided and doesn't
+     *         match a default OS.
      */
     String getLibraryFileNameSuffix();
     
     /**
-     * @return CPUType name to use. If this is set, operating system detection is still performed.
+     * @return Architecture name to use. If this is set, no architecture detection is performed.
      */
     String getArchitectureName();
 }

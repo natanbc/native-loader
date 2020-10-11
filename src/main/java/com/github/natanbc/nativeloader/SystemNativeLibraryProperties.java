@@ -1,10 +1,12 @@
 package com.github.natanbc.nativeloader;
 
+import javax.annotation.Nullable;
+
 public class SystemNativeLibraryProperties implements NativeLibraryProperties {
     private final String libraryName;
     private final String propertyPrefix;
     
-    public SystemNativeLibraryProperties(String libraryName, String propertyPrefix) {
+    public SystemNativeLibraryProperties(@Nullable String libraryName, String propertyPrefix) {
         this.libraryName = libraryName;
         this.propertyPrefix = propertyPrefix;
     }
@@ -25,8 +27,8 @@ public class SystemNativeLibraryProperties implements NativeLibraryProperties {
     }
     
     @Override
-    public String getSystemName() {
-        return get("system");
+    public String getOperatingSystemName() {
+        return get("os");
     }
     
     @Override
@@ -45,6 +47,9 @@ public class SystemNativeLibraryProperties implements NativeLibraryProperties {
     }
     
     private String get(String property) {
+        if(libraryName == null) {
+            return System.getProperty(propertyPrefix + property);
+        }
         return System.getProperty(
                 propertyPrefix + libraryName + "." + property,
                 System.getProperty(propertyPrefix + property)
