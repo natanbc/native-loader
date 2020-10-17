@@ -12,7 +12,8 @@ public enum DefaultOperatingSystemTypes implements OperatingSystemType {
     LINUX_MUSL("linux-musl", "lib", ".so"),
     WINDOWS("win", "", ".dll"),
     DARWIN("darwin", "lib", ".dylib"),
-    SOLARIS("solaris", "lib", ".so");
+    SOLARIS("solaris", "lib", ".so"),
+    FREEBSD("freebsd", "lib", ".so");
     
     private static final Logger log = LoggerFactory.getLogger(DefaultOperatingSystemTypes.class);
     private static volatile Boolean cachedMusl;
@@ -53,6 +54,8 @@ public enum DefaultOperatingSystemTypes implements OperatingSystemType {
             return SOLARIS;
         } else if(osFullName.toLowerCase().startsWith("linux")) {
             return checkMusl() ? LINUX_MUSL : LINUX;
+        } else if(osFullName.startsWith("FreeBSD")) {
+            return FREEBSD;
         } else {
             throw new IllegalArgumentException("Unknown operating system: " + osFullName);
         }
