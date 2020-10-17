@@ -5,7 +5,7 @@ plugins {
     id 'com.jfrog.bintray' version '1.8.4'
 }
 
-def versionObj = new Version(major: 0, minor: 5, revision: 0)
+def versionObj = new Version(major: 0, minor: 6, revision: 0)
 
 archivesBaseName = 'native-loader'
 group 'com.github.natanbc'
