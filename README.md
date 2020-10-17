@@ -9,7 +9,7 @@ loader.
 
 ```gradle
 repositories {
-  maven { url 'https://dl.bintray.com/natanbc/maven' }
+  jcenter()
 }
 
 dependencies {
@@ -20,9 +20,9 @@ dependencies {
 ```xml
 <repositories>
     <repository>
-      <id>bintray-natanbc-maven</id>
-      <name>bintray</name>
-      <url>https://dl.bintray.com/natanbc/maven</url>
+        <id>jcenter</id>
+        <name>jcenter</name>
+        <url>https://jcenter.bintray.com</url>
     </repository>
 </repositories>
 
@@ -70,15 +70,18 @@ Libraries are loaded by default from `/natives/<OS>-<ARCH*>/<NAME>`.
 
 For a library named `mylib`:
 
-| OS | Architecture | File |
-|----|--------------|------|
-| Windows | x86 | /natives/win-x86/mylib.dll |
-| Windows | x86-64 | /natives/win-x86-64/mylib.dll |
-| Linux | x86 | /natives/linux-x86/libmylib.so |
-| Linux | x86-64 | /natives/linux-x86-64/libmylib.so |
-| Linux | arm | /natives/linux-arm/libmylib.so |
-| Linux | aarch64 | /natives/linux-aarch64/libmylib.so |
-| OS X* | x86-64 | /natives/darwin/libmylib.dylib |
+| OS             | Architecture | File                                    |
+|----------------|--------------|-----------------------------------------|
+| Darwin (OS X*) | x86-64       | /natives/darwin/libmylib.dylib          |
+| Freebsd        | x86-64       | /natives/freebsd-x86-64/libmylib.so     |
+| Linux (glibc)  | aarch64      | /natives/linux-aarch64/libmylib.so      |
+| Linux (glibc)  | arm          | /natives/linux-arm/libmylib.so          |
+| Linux (glibc)  | x86          | /natives/linux-x86/libmylib.so          |
+| Linux (glibc)  | x86-64       | /natives/linux-x86-64/libmylib.so       |
+| Linux (musl)   | aarch64      | /natives/linux-musl-aarch64/libmylib.so |
+| Linux (musl)   | x86-64       | /natives/linux-musl-x86-64/libmylib.so  |
+| Windows        | x86          | /natives/win-x86/mylib.dll              |
+| Windows        | x86-64       | /natives/win-x86-64/mylib.dll           |
 
 * OS X natives don't have the architecture in the path, only the OS
 
