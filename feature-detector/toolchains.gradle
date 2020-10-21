@@ -28,6 +28,13 @@ task buildLinux {
             buildLinuxGlibcAarch64, buildLinuxMusl64
 }
 
+static def platformName(p) {
+    if(p instanceof String) {
+        return p
+    }
+    return p.name
+}
+
 def targetDirectory = [
         darwin_x86_64: "darwin",
         freebsd_x86_64: "freebsd-x86-64",
@@ -41,10 +48,10 @@ def targetDirectory = [
         windows_x86_64: "win-x86-64",
 ]
 
-project.ext.targetDirectoryName = { String name ->
-    def r = targetDirectory[name]
+project.ext.targetDirectoryName = { platform ->
+    def r = targetDirectory[platformName(platform)]
     if(r == null) {
-        throw new Exception("Invalid target '${name}'")
+        throw new Exception("Invalid target '${platform}'")
     }
     return r
 }
@@ -62,22 +69,15 @@ def tasksByTarget = [
         windows_x86_64:      buildWin64
 ]
 
-project.ext.taskForTarget = { name ->
-    def t = tasksByTarget[name]
+project.ext.taskForTarget = { platform ->
+    def t = tasksByTarget[platformName(platform)]
     if(t == null) {
-        throw new Exception("Invalid target '${name}'")
+        throw new Exception("Invalid target '${platform}'")
     }
     return t
 }
 
 project.ext.targets = tasksByTarget.keySet()
-
-static def platformName(p) {
-    if(p instanceof String) {
-        return p
-    }
-    return p.name
-}
 
 project.ext.isDarwin = { platform ->
     return platformName(platform).startsWith("darwin_")

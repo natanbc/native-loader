@@ -21,7 +21,7 @@ plugins {
 
 apply from: 'toolchains.gradle'
 
-def cpuFeaturesSources = project.ext.targets.collectEntries { target ->
+def cpuFeaturesSources = targets.collectEntries { target ->
     String cpu
     if(isX86(target)) {
         cpu = "x86"
@@ -39,7 +39,7 @@ model {
     //noinspection GroovyAssignabilityCheck
     components {
         detector(NativeLibrarySpec) {
-            project.ext.targets.each { targetPlatform it }
+            targets.each { targetPlatform it }
             sources {
                 cpp {
                     source {
@@ -56,8 +56,8 @@ model {
                 cCompiler.define "HAVE_STRONG_GETAUXVAL"
                 def platform = it.targetPlatform
                 def file = cpuFeaturesSources[platform.name]
-                def unix = project.ext.isUnix(platform)
-                def x86 = project.ext.isX86(platform)
+                def unix = isUnix(platform)
+                def x86 = isX86(platform)
                 sources {
                     c(CSourceSet) {
                         source {
@@ -88,19 +88,22 @@ model {
                 cppCompiler.args "-O3"
                 cCompiler.args "-O3"
             }
+
+            if(isFreebsd(targetPlatform)) {
+                lib library: 'freebsd_headers', linkage: 'api'
+            }
         }
     }
 }
 
 tasks.withType(LinkSharedLibrary) {
     def filename = it.installName.get()
-    def arch = project.ext.targetDirectoryName(it.targetPlatform.get().name)
+    def arch = targetDirectoryName(it.targetPlatform.get())
     if(arch.contains("darwin")) {
         filename = filename.replace(".so", ".dylib")
     }
     def newPath = new File(rootProject.projectDir, "src/main/resources/natives/" + arch + "/" + filename).getAbsoluteFile()
     newPath.getParentFile().mkdirs()
     it.linkedFile.set(newPath)
-    def name = it.targetPlatform.get().name
-    project.ext.taskForTarget(name).dependsOn it
+    taskForTarget(it.targetPlatform.get()).dependsOn it
 }
