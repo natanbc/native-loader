@@ -12,37 +12,37 @@ public class SystemNativeLibraryProperties implements NativeLibraryProperties {
     }
     
     @Override
-    public String getLibraryPath() {
+    public String libraryPath() {
         return get("path");
     }
     
     @Override
-    public String getLibraryDirectory() {
+    public String libraryDirectory() {
         return get("dir");
     }
     
     @Override
-    public String getExtractionPath() {
+    public String extractionPath() {
         return get("extractPath");
     }
     
     @Override
-    public String getOperatingSystemName() {
+    public String operatingSystemName() {
         return get("os");
     }
     
     @Override
-    public String getLibraryFileNamePrefix() {
+    public String libraryFileNamePrefix() {
         return get("libPrefix");
     }
     
     @Override
-    public String getLibraryFileNameSuffix() {
+    public String libraryFileNameSuffix() {
         return get("libSuffix");
     }
     
     @Override
-    public String getArchitectureName() {
+    public String architectureName() {
         return get("arch");
     }
     

@@ -32,13 +32,13 @@ public enum X86Feature implements CPUFeature {
     
     @Override
     @Nonnull
-    public CPUType getCPUType() {
+    public CPUType cpuType() {
         return CPUType.X86;
     }
     
     @Nonnull
     @Override
-    public String getNativeName() {
+    public String nativeName() {
         return nativeName;
     }
 }

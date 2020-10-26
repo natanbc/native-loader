@@ -27,13 +27,13 @@ public enum Aarch64Feature implements CPUFeature {
     
     @Override
     @Nonnull
-    public CPUType getCPUType() {
+    public CPUType cpuType() {
         return CPUType.AARCH64;
     }
     
     @Nonnull
     @Override
-    public String getNativeName() {
+    public String nativeName() {
         return nativeName;
     }
 }

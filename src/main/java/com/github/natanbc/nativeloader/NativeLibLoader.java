@@ -42,7 +42,7 @@ public class NativeLibLoader {
     @Nonnull
     @CheckReturnValue
     public NativeLibLoader withFeature(@Nonnull CPUFeature feature) {
-        return withFeature(feature, feature.getNativeName().toLowerCase());
+        return withFeature(feature, feature.nativeName().toLowerCase());
     }
     
     @Nonnull
@@ -90,7 +90,7 @@ public class NativeLibLoader {
     }
     
     private void load0() {
-        String explicitPath = properties.getLibraryPath();
+        String explicitPath = properties.libraryPath();
         
         if(explicitPath != null) {
             log.debug("Native library {}: explicit path provided {}", baseName, explicitPath);
@@ -100,7 +100,7 @@ public class NativeLibLoader {
             SystemType type = detectMatchingSystemType();
             
             if(type != null) {
-                String explicitDirectory = properties.getLibraryDirectory();
+                String explicitDirectory = properties.libraryDirectory();
                 
                 if(explicitDirectory != null) {
                     log.debug("Native library {}: explicit directory provided {}", baseName, explicitDirectory);
@@ -148,8 +148,8 @@ public class NativeLibLoader {
         StringBuilder libraryNameBuilder = new StringBuilder(baseName);
         for(OptionalPart part : parts) {
             CPUInfo info = DetectorLoader.loadDetector(loader);
-            if(part.feature.getCPUType() == info.getArch().cpuType()) {
-                if(info.getFeatures().getOrDefault(part.feature.getNativeName(), false)) {
+            if(part.feature.cpuType() == info.arch().cpuType()) {
+                if(info.features().getOrDefault(part.feature.nativeName(), false)) {
                     libraryNameBuilder.append('-').append(part.part);
                 }
             }
@@ -199,7 +199,7 @@ public class NativeLibLoader {
     }
     
     private Path detectExtractionBaseDirectory() {
-        String explicitExtractionBase = properties.getExtractionPath();
+        String explicitExtractionBase = properties.extractionPath();
         
         if(explicitExtractionBase != null) {
             log.debug("Native library {}: explicit extraction path provided - {}", baseName, explicitExtractionBase);
@@ -271,7 +271,7 @@ public class NativeLibLoader {
         
         @Override
         public String toString() {
-            return "Part{feature=" + (feature.getCPUType().name() + "." + feature.getNativeName())
+            return "Part{feature=" + (feature.cpuType().name() + "." + feature.nativeName())
                     + ", part=" + part + "}";
         }
     }

@@ -15,27 +15,27 @@ public interface CPUFeature {
      * @return The type of CPU this feature applies to.
      */
     @Nonnull
-    CPUType getCPUType();
+    CPUType cpuType();
     
     /**
      * @return The name of this feature, as returned by the detector library
      *         and which should be appended to the loaded natives.
      */
     @Nonnull
-    String getNativeName();
+    String nativeName();
     
     @Nonnull
     static CPUFeature custom(CPUType type, String nativeName) {
         return new CPUFeature() {
             @Nonnull
             @Override
-            public CPUType getCPUType() {
+            public CPUType cpuType() {
                 return type;
             }
     
             @Nonnull
             @Override
-            public String getNativeName() {
+            public String nativeName() {
                 return nativeName;
             }
         };

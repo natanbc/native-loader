@@ -24,13 +24,13 @@ public enum ArmFeature implements CPUFeature {
     
     @Override
     @Nonnull
-    public CPUType getCPUType() {
+    public CPUType cpuType() {
         return CPUType.ARM;
     }
     
     @Nonnull
     @Override
-    public String getNativeName() {
+    public String nativeName() {
         return nativeName;
     }
 }

@@ -19,19 +19,19 @@ public class CPUInfo {
     
     @Nonnull
     @CheckReturnValue
-    public ArchitectureType getArch() {
+    public ArchitectureType arch() {
         return arch;
     }
     
     @Nonnull
     @CheckReturnValue
-    public Map<String, Boolean> getFeatures() {
+    public Map<String, Boolean> features() {
         return features;
     }
     
     @Nonnull
     @CheckReturnValue
-    public CacheInfo getCacheInfo() {
+    public CacheInfo cacheInfo() {
         return cacheInfo;
     }
 }

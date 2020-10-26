@@ -20,30 +20,30 @@ public class Aarch64CPUInfo extends CPUInfo {
     }
     
     @CheckReturnValue
-    public int getImplementer() {
+    public int implementer() {
         return implementer;
     }
     
     @CheckReturnValue
-    public int getVariant() {
+    public int variant() {
         return variant;
     }
     
     @CheckReturnValue
-    public int getPart() {
+    public int part() {
         return part;
     }
     
     @CheckReturnValue
-    public int getRevision() {
+    public int revision() {
         return revision;
     }
     
     @Override
     public String toString() {
         return "Aarch64CPU{features = " + FeatureFormatter.formatFeatures(this) +
-                ", implementer = " + getImplementer() + ", variant = " + getVariant() +
-                ", part = " + getPart() + ", revision = " + getRevision() +
-                ", cache = " + getCacheInfo() + "}";
+                ", implementer = " + implementer() + ", variant = " + variant() +
+                ", part = " + part() + ", revision = " + revision() +
+                ", cache = " + cacheInfo() + "}";
     }
 }

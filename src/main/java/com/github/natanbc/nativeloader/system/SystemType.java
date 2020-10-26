@@ -45,7 +45,7 @@ public class SystemType {
     }
     
     private static OperatingSystemType detectOS(NativeLibraryProperties properties) {
-        String name = properties.getOperatingSystemName();
+        String name = properties.operatingSystemName();
         if(name == null) {
             return DefaultOperatingSystemTypes.detect();
         }
@@ -54,14 +54,14 @@ public class SystemType {
         } catch(IllegalArgumentException e) {
             return new UnknownOperatingSystem(
                     name,
-                    Optional.ofNullable(properties.getLibraryFileNamePrefix()).orElse("lib"),
-                    Optional.ofNullable(properties.getLibraryFileNameSuffix()).orElse(".so")
+                    Optional.ofNullable(properties.libraryFileNamePrefix()).orElse("lib"),
+                    Optional.ofNullable(properties.libraryFileNameSuffix()).orElse(".so")
             );
         }
     }
     
     private static ArchitectureType detectArch(NativeLibraryProperties properties) {
-        String name = properties.getArchitectureName();
+        String name = properties.architectureName();
         if(name == null) {
             return DefaultArchitectureTypes.detect();
         }

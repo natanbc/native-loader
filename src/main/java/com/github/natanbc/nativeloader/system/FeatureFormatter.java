@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 class FeatureFormatter {
     static String formatFeatures(CPUInfo info) {
-        return info.getFeatures().entrySet().stream()
+        return info.features().entrySet().stream()
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
                 .sorted()

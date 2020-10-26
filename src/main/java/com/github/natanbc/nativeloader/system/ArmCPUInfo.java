@@ -25,40 +25,40 @@ public class ArmCPUInfo extends CPUInfo {
     }
     
     @CheckReturnValue
-    public int getCpuId() {
+    public int cpuId() {
         return cpuId;
     }
     
     @CheckReturnValue
-    public int getImplementer() {
+    public int implementer() {
         return implementer;
     }
     
     @CheckReturnValue
-    public int getArchitecture() {
+    public int architecture() {
         return architecture;
     }
     
     @CheckReturnValue
-    public int getVariant() {
+    public int variant() {
         return variant;
     }
     
     @CheckReturnValue
-    public int getPart() {
+    public int part() {
         return part;
     }
     
     @CheckReturnValue
-    public int getRevision() {
+    public int revision() {
         return revision;
     }
     
     @Override
     public String toString() {
-        return "ArmCPU{features = " + FeatureFormatter.formatFeatures(this) + ", cpuId = " + getCpuId() +
-                ", implementer = " + getImplementer() + ", architecture = " + getArchitecture() +
-                ", variant = " + getVariant() + ", part = " + getPart() + ", revision = " + getRevision() +
-                ", cache = " + getCacheInfo() + "}";
+        return "ArmCPU{features = " + FeatureFormatter.formatFeatures(this) + ", cpuId = " + cpuId() +
+                ", implementer = " + implementer() + ", architecture = " + architecture() +
+                ", variant = " + variant() + ", part = " + part() + ", revision = " + revision() +
+                ", cache = " + cacheInfo() + "}";
     }
 }

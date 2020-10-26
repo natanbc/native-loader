@@ -26,42 +26,42 @@ public class X86CPUInfo extends CPUInfo {
     
     @Nonnull
     @CheckReturnValue
-    public X86Microarchitecture getMicroarchitecture() {
+    public X86Microarchitecture microarchitecture() {
         return microarchitecture;
     }
     
     @CheckReturnValue
-    public int getFamily() {
+    public int family() {
         return family;
     }
     
     @CheckReturnValue
-    public int getModel() {
+    public int model() {
         return model;
     }
     
     @CheckReturnValue
-    public int getStepping() {
+    public int stepping() {
         return stepping;
     }
     
     @Nonnull
     @CheckReturnValue
-    public String getVendor() {
+    public String vendor() {
         return vendor;
     }
     
     @Nonnull
     @CheckReturnValue
-    public String getBrandString() {
+    public String brandString() {
         return brandString;
     }
     
     @Override
     public String toString() {
         return "X86CPU{features = " + FeatureFormatter.formatFeatures(this) +
-                ", microarchitecture = " + getMicroarchitecture() + ", family = " + getFamily() +
-                ", model = " + getModel() + ", stepping = " + getStepping() + ", vendor = " + getVendor() +
-                ", brandString = " + getBrandString() + "}";
+                ", microarchitecture = " + microarchitecture() + ", family = " + family() +
+                ", model = " + model() + ", stepping = " + stepping() + ", vendor = " + vendor() +
+                ", brandString = " + brandString() + ", cache = " + cacheInfo() + "}";
     }
 }
