@@ -13,11 +13,11 @@ public class SystemType {
         this.osType = osType;
     }
     
-    public ArchitectureType getArchitectureType() {
+    public ArchitectureType architectureType() {
         return architectureType;
     }
     
-    public OperatingSystemType getOsType() {
+    public OperatingSystemType osType() {
         return osType;
     }
     
