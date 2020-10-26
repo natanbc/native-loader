@@ -5,11 +5,13 @@
 
 #ifdef CPU_FEATURES_ARCH_X86
   #include "cpuinfo_x86.h"
+  #define HAS_CACHE_INFO 1
   using FeatureEnum = cpu_features::X86FeaturesEnum;
   const auto arch = 1;
   const auto featureCount = cpu_features::X86_LAST_;
   const auto info = cpu_features::GetX86Info();
   const auto features = info.features;
+  const auto cache = cpu_features::GetX86CacheInfo();
   inline jboolean feature_check(jint feature) {
     return cpu_features::GetX86FeaturesEnumValue(&features, static_cast<FeatureEnum>(feature));
   }
@@ -65,6 +67,43 @@ JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_Natives_hasFeatu
 JNIEXPORT jstring JNICALL Java_com_github_natanbc_nativeloader_Natives_featureName(JNIEnv* env, jclass thiz, jint value) {
     return env->NewStringUTF(feature_name(value));
 }
+
+#ifdef HAS_CACHE_INFO
+
+JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheSize(JNIEnv* env, jclass thiz) {
+    return cache.size;
+}
+
+JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheLevelFields(JNIEnv* env, jclass thiz) {
+    return 7;
+}
+
+JNIEXPORT void JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheLevel(JNIEnv* env, jclass thiz, jint level, jintArray res) {
+    const auto level_info = cache.levels[level];
+    jint data[] = {
+        level_info.level,       level_info.cache_type,
+        level_info.cache_size,  level_info.ways,
+        level_info.line_size,   level_info.tlb_entries,
+        level_info.partitioning
+    };
+    env->SetIntArrayRegion(res, 0, sizeof(data) / sizeof(jint), data);
+}
+
+#else
+
+JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheSize(JNIEnv* env, jclass thiz) {
+    return 0;
+}
+
+JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheLevelFields(JNIEnv* env, jclass thiz) {
+    return 0;
+}
+
+JNIEXPORT void JNICALL Java_com_github_natanbc_nativeloader_Natives_cacheLevel(JNIEnv* env, jclass thiz, jint level, jintArray res) {
+    //nothing
+}
+
+#endif
 
 #ifdef CPU_FEATURES_ARCH_X86
   JNIEXPORT jstring JNICALL Java_com_github_natanbc_nativeloader_Natives_x86Microarchitecture(JNIEnv* env, jclass thiz) {

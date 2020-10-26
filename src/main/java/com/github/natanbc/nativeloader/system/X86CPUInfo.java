@@ -12,9 +12,10 @@ public class X86CPUInfo extends CPUInfo {
     private final String vendor;
     private final String brandString;
     
-    public X86CPUInfo(boolean is64Bit, Map<String, Boolean> features, @Nonnull X86Microarchitecture microarchitecture,
-                      int family, int model, int stepping, @Nonnull String vendor, @Nonnull String brandString) {
-        super(is64Bit ? DefaultArchitectureTypes.X86_64 : DefaultArchitectureTypes.X86_32, features);
+    public X86CPUInfo(boolean is64Bit, @Nonnull Map<String, Boolean> features, @Nonnull CacheInfo cacheInfo,
+                      @Nonnull X86Microarchitecture microarchitecture, int family, int model,
+                      int stepping, @Nonnull String vendor, @Nonnull String brandString) {
+        super(is64Bit ? DefaultArchitectureTypes.X86_64 : DefaultArchitectureTypes.X86_32, features, cacheInfo);
         this.microarchitecture = microarchitecture;
         this.family = family;
         this.model = model;

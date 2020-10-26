@@ -8,10 +8,13 @@ import java.util.Map;
 public class CPUInfo {
     private final ArchitectureType arch;
     private final Map<String, Boolean> features;
+    private final CacheInfo cacheInfo;
     
-    public CPUInfo(@Nonnull ArchitectureType arch, Map<String, Boolean> features) {
+    public CPUInfo(@Nonnull ArchitectureType arch, @Nonnull Map<String, Boolean> features,
+                   @Nonnull CacheInfo cacheInfo) {
         this.arch = arch;
         this.features = Collections.unmodifiableMap(features);
+        this.cacheInfo = cacheInfo;
     }
     
     @Nonnull
@@ -20,8 +23,15 @@ public class CPUInfo {
         return arch;
     }
     
+    @Nonnull
     @CheckReturnValue
     public Map<String, Boolean> getFeatures() {
         return features;
+    }
+    
+    @Nonnull
+    @CheckReturnValue
+    public CacheInfo getCacheInfo() {
+        return cacheInfo;
     }
 }

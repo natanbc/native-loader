@@ -1,6 +1,7 @@
 package com.github.natanbc.nativeloader.system;
 
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import java.util.Map;
 
 public class ArmCPUInfo extends CPUInfo {
@@ -11,9 +12,10 @@ public class ArmCPUInfo extends CPUInfo {
     private final int part;
     private final int revision;
     
-    public ArmCPUInfo(Map<String, Boolean> features, int cpuId, int implementer, int architecture,
+    public ArmCPUInfo(@Nonnull Map<String, Boolean> features, @Nonnull CacheInfo cacheInfo,
+                      int cpuId, int implementer, int architecture,
                       int variant, int part, int revision) {
-        super(DefaultArchitectureTypes.ARM, features);
+        super(DefaultArchitectureTypes.ARM, features, cacheInfo);
         this.cpuId = cpuId;
         this.implementer = implementer;
         this.architecture = architecture;
@@ -56,6 +58,7 @@ public class ArmCPUInfo extends CPUInfo {
     public String toString() {
         return "ArmCPU{features = " + FeatureFormatter.formatFeatures(this) + ", cpuId = " + getCpuId() +
                 ", implementer = " + getImplementer() + ", architecture = " + getArchitecture() +
-                ", variant = " + getVariant() + ", part = " + getPart() + ", revision = " + getRevision() + "}";
+                ", variant = " + getVariant() + ", part = " + getPart() + ", revision = " + getRevision() +
+                ", cache = " + getCacheInfo() + "}";
     }
 }
