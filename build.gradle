@@ -1,8 +1,6 @@
 plugins {
     id 'java-library'
-    id 'maven'
     id 'maven-publish'
-    id 'com.jfrog.bintray' version '1.8.4'
 }
 
 def versionObj = new Version(major: 0, minor: 7, revision: 0)
@@ -11,8 +9,8 @@ archivesBaseName = 'native-loader'
 group 'com.github.natanbc'
 version "${versionObj}"
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -20,7 +18,7 @@ repositories {
 
 dependencies {
     api 'com.google.code.findbugs:jsr305:3.0.2'
-    implementation 'org.slf4j:slf4j-api:1.7.25'
+    implementation 'org.slf4j:slf4j-api:1.7.36'
 }
 
 task sourceJar(type: Jar) {
@@ -46,39 +44,14 @@ publishing {
     }
 }
 
-bintray {
-    version = project.version
-    user = getProjectProperty("BINTRAY_USERNAME")
-    key = getProjectProperty("BINTRAY_API_KEY")
-    publications = ["BintrayRelease"]
-    pkg {
-        repo = 'maven'
-        name = 'native-loader'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/natanbc/native-loader.git'
-        publish = true
-        version {
-            name = project.version.toString()
-            released = new Date()
-        }
-    }
-}
-
 String getProjectProperty(String propertyName) {
-    String property;
+    String property
     if(hasProperty(propertyName)) {
         property = project.properties[propertyName]
     } else {
         property = System.getenv(propertyName) ?: ""
     }
     return property
-}
-
-bintrayUpload {
-    dependsOn build
-
-    onlyIf { !getProjectProperty("BINTRAY_USERNAME").empty }
-    onlyIf { !getProjectProperty("BINTRAY_API_KEY").empty }
 }
 
 class Version {
