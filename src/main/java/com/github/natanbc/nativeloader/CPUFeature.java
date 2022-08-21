@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 
 /**
  * @see com.github.natanbc.nativeloader.feature.Aarch64Feature
- * @see com.github.natanbc.nativeloader.feature.ArmFeature
+ * @see com.github.natanbc.nativeloader.arm.ArmFeature
  * @see com.github.natanbc.nativeloader.x86.X86Feature
  */
 public interface CPUFeature {

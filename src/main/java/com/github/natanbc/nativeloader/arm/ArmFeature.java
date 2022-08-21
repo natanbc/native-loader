@@ -1,4 +1,4 @@
-package com.github.natanbc.nativeloader.feature;
+package com.github.natanbc.nativeloader.arm;
 
 import com.github.natanbc.nativeloader.CPUFeature;
 import com.github.natanbc.nativeloader.system.CPUType;
