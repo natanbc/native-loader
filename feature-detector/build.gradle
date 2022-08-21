@@ -35,7 +35,7 @@ model {
                     srcs << "detector_darwin.c"
                 }
                 if(isLinux(it.targetPlatform) && isArm(it.targetPlatform)) {
-                    srcs << "detector_linux_arm.c"
+                    srcs << "detector_linux_getauxval.c"
                 }
                 if(isWindows(it.targetPlatform)) {
                     srcs << "detector_windows.c"
