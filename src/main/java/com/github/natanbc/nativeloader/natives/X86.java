@@ -140,7 +140,7 @@ public class X86 {
                 //TODO: macos check
                 //noinspection ConstantConditions
                 if(false) {
-                    osPreserves.avx512 = DarwinNatives.getSysctl("hw.optional.avx512f");
+                    osPreserves.avx512 = DarwinNatives.getSysctl(DarwinNatives.AVX512F);
                 }
                 
                 
@@ -187,6 +187,11 @@ public class X86 {
                     if(leaf7_0.edx(24)) features.add(AMX_TILE);
                     if(leaf7_0.edx(25)) features.add(AMX_INT8);
                 }
+            } else {
+                parseFeaturesFromOs(features);
+                if(features.contains(SSE)) {
+                    osPreserves.sse = true;
+                }
             }
         }
     
@@ -218,6 +223,16 @@ public class X86 {
             if(osPreserves.avx) {
                 if(leaf8000001.ecx(16)) features.add(FMA4);
             }
+        }
+        
+        @SuppressWarnings({"DuplicateCondition", "ConstantConditions"})
+        private void parseFeaturesFromOs(Set<X86Feature> features) {
+            if(false) {
+                WindowsNatives.addX86Features(features);
+            } else if(false) {
+                DarwinNatives.addX86Features(features);
+            }
+            //TODO: linux, freebsd
         }
         
         private X86Microarchitecture uarch() {

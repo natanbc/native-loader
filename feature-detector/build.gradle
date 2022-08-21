@@ -30,9 +30,14 @@ model {
                 if(isX86(it.targetPlatform)) {
                     srcs << "detector_x86.c"
                 }
+
                 if(isDarwin(it.targetPlatform)) {
                     srcs << "detector_darwin.c"
                 }
+                if(isWindows(it.targetPlatform)) {
+                    srcs << "detector_windows.c"
+                }
+
                 if(srcs.size() == 0) {
                     throw new Exception("Missing source define for target ${it.targetPlatform}")
                 }
