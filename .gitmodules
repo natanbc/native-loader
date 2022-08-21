@@ -1,3 +1,0 @@
-[submodule "feature-detector/cpu_features"]
-	path = feature-detector/cpu_features
-	url = https://github.com/google/cpu_features

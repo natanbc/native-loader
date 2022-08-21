@@ -15,60 +15,32 @@
  */
 
 plugins {
-    id 'cpp'
     id 'c'
 }
 
 apply from: 'toolchains.gradle'
 
-def cpuFeaturesSources = targets.collectEntries { target ->
-    String cpu
-    if(isX86(target)) {
-        cpu = "x86"
-    } else if(isArm32(target)) {
-        cpu = "arm"
-    } else if(isArm64(target)) {
-        cpu = "aarch64"
-    } else {
-        throw new Exception("Unsupported target '$target'")
-    }
-    return [target, "cpuinfo_${cpu}.c"]
-}
-
 model {
     //noinspection GroovyAssignabilityCheck
     components {
         detector(NativeLibrarySpec) {
-            targets.each { targetPlatform it }
-            sources {
-                cpp {
-                    source {
-                        srcDir "src/main/cpp"
-                        include "**/*.cpp"
-                    }
-                    exportedHeaders {
-                        srcDir "cpu_features/include"
-                    }
-                }
-            }
+            targets.each { if(isX86(it)) targetPlatform it }
             binaries.all {
-                cCompiler.define "STACK_LINE_READER_BUFFER_SIZE", "1024"
-                cCompiler.define "HAVE_STRONG_GETAUXVAL"
-                def platform = it.targetPlatform
-                def file = cpuFeaturesSources[platform.name]
-                def unix = isUnix(platform)
-                def x86 = isX86(platform)
+                def srcs = []
+                if(isX86(it.targetPlatform)) {
+                    srcs << "detector_x86.c"
+                }
+                if(isDarwin(it.targetPlatform)) {
+                    srcs << "detector_darwin.c"
+                }
+                if(srcs.size() == 0) {
+                    throw new Exception("Missing source define for target ${it.targetPlatform}")
+                }
                 sources {
                     c(CSourceSet) {
                         source {
-                            srcDir "cpu_features/src"
-                            include file, "filesystem.c", "string_view.c", "stack_line_reader.c"
-                            if(unix && !x86) {
-                                include "unix_features_aggregator.c", "hwcaps.c"
-                            }
-                        }
-                        exportedHeaders {
-                            srcDir "cpu_features/include"
+                            srcDir "src/main/c"
+                            srcs.each { include it }
                         }
                     }
                 }
@@ -80,11 +52,11 @@ model {
             lib library: 'jni', linkage: 'api'
 
             if(toolChain in VisualCpp) {
-                cppCompiler.args '/std:c++17'
+                cppCompiler.args '/std:c11'
                 cppCompiler.args "/Ox"
                 cCompiler.args "/Ox"
             } else if(toolChain in Gcc || toolChain in Clang) {
-                cppCompiler.args '-std=c++17'
+                cppCompiler.args '-std=c11'
                 cppCompiler.args "-O3"
                 cCompiler.args "-O3"
             }
