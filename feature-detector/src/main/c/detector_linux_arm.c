@@ -2,7 +2,7 @@
 
 unsigned long getauxval(unsigned long type) __attribute__((weak));
 
-static_assert(sizeof(unsigned long) == sizeof(jint));
+_Static_assert(sizeof(unsigned long) == sizeof(jint), "unsigned long should have the same size as jint");
 
 JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_hasGetauxval(
     JNIEnv* env, jclass thiz
