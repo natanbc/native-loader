@@ -1,9 +1,6 @@
 package com.github.natanbc.nativeloader.natives;
 
-import com.github.natanbc.nativeloader.x86.X86Feature;
-
 import java.lang.annotation.Native;
-import java.util.Set;
 
 class DarwinNatives {
     @Native private static final int SYSCTL_OK = 0;
@@ -36,26 +33,5 @@ class DarwinNatives {
     
     static boolean hasFeature(String name) {
         return getSysctl(name) != 0;
-    }
-    
-    static void addX86Features(Set<X86Feature> features) {
-        if(hasFeature(SSE)) {
-            features.add(X86Feature.SSE);
-        }
-        if(hasFeature(SSE2)) {
-            features.add(X86Feature.SSE2);
-        }
-        if(hasFeature(SSE3)) {
-            features.add(X86Feature.SSE3);
-        }
-        if(hasFeature(SSSE3)) {
-            features.add(X86Feature.SSSE3);
-        }
-        if(hasFeature(SSE_4_1)) {
-            features.add(X86Feature.SSE4_1);
-        }
-        if(hasFeature(SSE_4_2)) {
-            features.add(X86Feature.SSE4_2);
-        }
     }
 }

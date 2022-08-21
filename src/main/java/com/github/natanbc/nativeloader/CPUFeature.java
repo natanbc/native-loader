@@ -5,7 +5,7 @@ import com.github.natanbc.nativeloader.system.CPUType;
 import javax.annotation.Nonnull;
 
 /**
- * @see com.github.natanbc.nativeloader.feature.Aarch64Feature
+ * @see com.github.natanbc.nativeloader.arm64.Arm64Feature
  * @see com.github.natanbc.nativeloader.arm.ArmFeature
  * @see com.github.natanbc.nativeloader.x86.X86Feature
  */
