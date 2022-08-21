@@ -9,7 +9,7 @@ import com.github.natanbc.nativeloader.system.CacheLevelInfo;
 import com.github.natanbc.nativeloader.system.CacheType;
 import com.github.natanbc.nativeloader.system.DefaultArchitectureTypes;
 import com.github.natanbc.nativeloader.system.X86CPUInfo;
-import com.github.natanbc.nativeloader.system.X86Microarchitecture;
+import com.github.natanbc.nativeloader.x86.X86Microarchitecture;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -111,7 +111,7 @@ class Natives {
                 x86Vendor(vendor, 0);
                 x86BrandString(brandString, 0);
                 return new X86CPUInfo(
-                        is64Bit, features, cache, X86Microarchitecture.fromNative(x86Microarchitecture()),
+                        is64Bit, features, cache, X86Microarchitecture.UNKNOWN,
                         x86Family(), x86Model(), x86Stepping(), fromCString(vendor),
                         fromCString(brandString)
                 );

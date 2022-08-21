@@ -1,5 +1,7 @@
 package com.github.natanbc.nativeloader.system;
 
+import com.github.natanbc.nativeloader.x86.X86Microarchitecture;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import java.util.Map;

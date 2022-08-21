@@ -1,14 +1,13 @@
-package com.github.natanbc.nativeloader.feature;
+package com.github.natanbc.nativeloader;
 
 import com.github.natanbc.nativeloader.system.CPUType;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 /**
  * @see com.github.natanbc.nativeloader.feature.Aarch64Feature
  * @see com.github.natanbc.nativeloader.feature.ArmFeature
- * @see com.github.natanbc.nativeloader.feature.X86Feature
+ * @see com.github.natanbc.nativeloader.x86.X86Feature
  */
 public interface CPUFeature {
     /**
@@ -23,21 +22,4 @@ public interface CPUFeature {
      */
     @Nonnull
     String nativeName();
-    
-    @Nonnull
-    static CPUFeature custom(CPUType type, String nativeName) {
-        return new CPUFeature() {
-            @Nonnull
-            @Override
-            public CPUType cpuType() {
-                return type;
-            }
-    
-            @Nonnull
-            @Override
-            public String nativeName() {
-                return nativeName;
-            }
-        };
-    }
 }

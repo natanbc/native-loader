@@ -1,8 +1,8 @@
 package com.github.natanbc.nativeloader.feature;
 
+import com.github.natanbc.nativeloader.CPUFeature;
 import com.github.natanbc.nativeloader.system.CPUType;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 public enum ArmFeature implements CPUFeature {

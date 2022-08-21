@@ -1,8 +1,8 @@
-package com.github.natanbc.nativeloader.feature;
+package com.github.natanbc.nativeloader.x86;
 
+import com.github.natanbc.nativeloader.CPUFeature;
 import com.github.natanbc.nativeloader.system.CPUType;
 
-import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
 
 public enum X86Feature implements CPUFeature {
@@ -18,7 +18,7 @@ public enum X86Feature implements CPUFeature {
     ERMS, F16C, FMA3, FMA4, FPU, HLE, MMX, MOVBE, PCLMULQDQ,
     POPCNT, RDRND, RDSEED, RTM, SGX, SHA, SMX, SS,
     SSE, SSE2, SSE3, SSE4A, SSE4_1, SSE4_2, SSSE3,
-    TSC, VAES, VPCLMULQDQ;
+    TSC, VAES, VPCLMULQDQ, ADX, LZCNT, AVXVNNI;
     
     private final String nativeName;
     

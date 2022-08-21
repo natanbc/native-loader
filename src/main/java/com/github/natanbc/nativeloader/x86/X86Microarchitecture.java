@@ -1,0 +1,64 @@
+package com.github.natanbc.nativeloader.x86;
+
+public enum X86Microarchitecture {
+    UNKNOWN,
+    
+    AMD_UNKNOWN,
+    AMD_HAMMER,
+    AMD_K10,
+    AMD_K11,
+    AMD_K12,
+    AMD_BOBCAT,
+    AMD_BULLDOZER,
+    AMD_PILEDRIVER,
+    AMD_STEAMROLLER,
+    AMD_EXCAVATOR,
+    AMD_JAGUAR,
+    AMD_PUMA,
+    AMD_ZEN,
+    AMD_ZEN_PLUS,
+    AMD_ZEN2,
+    AMD_ZEN3,
+    AMD_ZEN4,
+    
+    INTEL_UNKNOWN,
+    INTEL_80486,
+    INTEL_P5,
+    INTEL_NETBURST,
+    INTEL_LAKEMONT,
+    INTEL_ATOM_BONNELL,
+    INTEL_ATOM_SILVERMONT,
+    INTEL_ATOM_GOLDMONT,
+    INTEL_ATOM_GOLDMONT_PLUS,
+    INTEL_ATOM_TREMONT,
+    INTEL_CORE,
+    INTEL_PENRYN,
+    INTEL_NEHALEM,
+    INTEL_WESTMERE,
+    INTEL_SANDY_BRIDGE, // core 2xxx
+    INTEL_IVY_BRIDGE, // core 3xxx
+    INTEL_HASWELL, // core 4xxx
+    INTEL_BROADWELL, // core 5xxx
+    INTEL_SKYLAKE, // core 6xxx
+    INTEL_KABY_LAKE, // core 7xxx
+    INTEL_CANNON_LAKE, // i3-8121U
+    INTEL_COFFEE_LAKE, // core 8xxx, 9xxx
+    INTEL_WHISKEY_LAKE, // core 8665U, 8565U, 8365U, 8265U, 8145U
+    INTEL_COMET_LAKE, // core 10xxx
+    INTEL_ICE_LAKE, // core 10xxGy
+    INTEL_TIGER_LAKE, // core 11xxGy
+    INTEL_ROCKET_LAKE, // core 11xxx
+    INTEL_ALDER_LAKE, // core 12xxx, 12xx
+    INTEL_SAPPHIRE_RAPIDS, // alder lake server
+    INTEL_KNIGHTS_MILL,
+    INTEL_KNIGHTS_LANDING,
+    INTEL_KNIGHTS_FERRY,
+    INTEL_KNIGHTS_CORNER,
+    
+    ZHAOXIN_UNKNOWN,
+    ZHAOXIN_ZHANGJIANG,
+    ZHAOXIN_WUDAOKOU,
+    ZHAOXIN_LUJIAZUI,
+    ZHAOXIN_YONGFENG,
+    ;
+}

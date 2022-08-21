@@ -1,6 +1,5 @@
 package com.github.natanbc.nativeloader;
 
-import com.github.natanbc.nativeloader.feature.CPUFeature;
 import com.github.natanbc.nativeloader.system.CPUInfo;
 import com.github.natanbc.nativeloader.system.SystemType;
 import org.slf4j.Logger;
