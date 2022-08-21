@@ -227,12 +227,16 @@ public class X86 {
         
         @SuppressWarnings({"DuplicateCondition", "ConstantConditions"})
         private void parseFeaturesFromOs(Set<X86Feature> features) {
+            //TODO: detect OS
             if(false) {
                 WindowsNatives.addX86Features(features);
             } else if(false) {
                 DarwinNatives.addX86Features(features);
+            } else if(false) {
+                Linux.addX86Features(features);
+            } else if(false) {
+                FreeBSD.addX86Features(features);
             }
-            //TODO: linux, freebsd
         }
         
         private X86Microarchitecture uarch() {
