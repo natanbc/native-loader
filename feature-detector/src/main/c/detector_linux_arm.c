@@ -10,7 +10,7 @@ JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNat
     return getauxval ? JNI_TRUE : JNI_FALSE;
 }
 
-JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_getauxval(
+JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_getauxval0(
     JNIEnv* env, jclass thiz, jlong type
 ) {
     (void)env;
