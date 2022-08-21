@@ -464,6 +464,7 @@ public class X86 {
                         case 0x96:
                         case 0x9C:
                             return INTEL_ATOM_TREMONT;
+                        case 0x0E:
                         case 0x0F:
                         case 0x16:
                             return INTEL_CORE;
