@@ -24,7 +24,7 @@ model {
     //noinspection GroovyAssignabilityCheck
     components {
         detector(NativeLibrarySpec) {
-            targets.each { if(isX86(it)) targetPlatform it }
+            targets.each { if(isX86(it) || (isLinux(it) && isArm(it))) targetPlatform it }
             binaries.all {
                 def srcs = []
                 if(isX86(it.targetPlatform)) {
@@ -33,6 +33,9 @@ model {
 
                 if(isDarwin(it.targetPlatform)) {
                     srcs << "detector_darwin.c"
+                }
+                if(isLinux(it.targetPlatform) && isArm(it.targetPlatform)) {
+                    srcs << "detector_linux_arm.c"
                 }
                 if(isWindows(it.targetPlatform)) {
                     srcs << "detector_windows.c"

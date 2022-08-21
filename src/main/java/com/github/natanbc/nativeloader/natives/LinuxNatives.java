@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 //not really natives, but its a fallback for them
-class Linux {
+class LinuxNatives {
     private static final Map<String, X86Feature> x86Map = Map.of(
             "sse", X86Feature.SSE,
             "sse2", X86Feature.SSE2,
@@ -19,6 +19,9 @@ class Linux {
             "sse4_1", X86Feature.SSE4_1,
             "sse4_2", X86Feature.SSE4_2
     );
+    
+    static native boolean hasGetauxval();
+    static native int getauxval(int type);
     
     static void addX86Features(Set<X86Feature> features) {
         try(var reader = Files.newBufferedReader(Path.of("/proc/cpuinfo"), StandardCharsets.UTF_8)) {

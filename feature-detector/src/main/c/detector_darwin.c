@@ -9,6 +9,8 @@ static const jint SYSCTL_FAIL = 3;
 JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_natives_DarwinNatives_getSysctl(
     JNIEnv* env, jclass thiz, jstring sysctl
 ) {
+    (void)thiz;
+
     const char* utf = (*env)->GetStringUTFChars(env, sysctl, 0);
     if(!utf) {
         return SYSCTL_OOM;

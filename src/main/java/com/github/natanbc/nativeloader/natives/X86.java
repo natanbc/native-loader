@@ -233,7 +233,7 @@ public class X86 {
             } else if(false) {
                 DarwinNatives.addX86Features(features);
             } else if(false) {
-                Linux.addX86Features(features);
+                LinuxNatives.addX86Features(features);
             } else if(false) {
                 FreeBSD.addX86Features(features);
             }
