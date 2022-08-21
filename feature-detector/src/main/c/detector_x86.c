@@ -42,7 +42,7 @@ JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_natives_X86Nativ
 ) {
     (void)thiz;
 
-    if((*env)->GetArrayLength(env, out) != 4) {
+    if(!out || (*env)->GetArrayLength(env, out) != 4) {
         return JNI_FALSE;
     }
 

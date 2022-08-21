@@ -140,7 +140,7 @@ public class X86 {
                 //TODO: macos check
                 //noinspection ConstantConditions
                 if(false) {
-                    osPreserves.avx512 = DarwinNatives.getSysctl(DarwinNatives.AVX512F);
+                    osPreserves.avx512 = DarwinNatives.hasFeature(DarwinNatives.AVX512F);
                 }
                 
                 
