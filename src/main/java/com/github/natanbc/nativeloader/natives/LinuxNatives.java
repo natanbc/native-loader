@@ -21,7 +21,7 @@ class LinuxNatives {
     );
     
     static native boolean hasGetauxval();
-    static native int getauxval(int type);
+    static native long getauxval(long type);
     
     static void addX86Features(Set<X86Feature> features) {
         try(var reader = Files.newBufferedReader(Path.of("/proc/cpuinfo"), StandardCharsets.UTF_8)) {

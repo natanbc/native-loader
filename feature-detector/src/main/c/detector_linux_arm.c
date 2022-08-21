@@ -2,8 +2,6 @@
 
 unsigned long getauxval(unsigned long type) __attribute__((weak));
 
-_Static_assert(sizeof(unsigned long) == sizeof(jint), "unsigned long should have the same size as jint");
-
 JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_hasGetauxval(
     JNIEnv* env, jclass thiz
 ) {
@@ -12,13 +10,13 @@ JNIEXPORT jboolean JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNat
     return getauxval ? JNI_TRUE : JNI_FALSE;
 }
 
-JNIEXPORT jint JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_getauxval(
-    JNIEnv* env, jclass thiz, jint type
+JNIEXPORT jlong JNICALL Java_com_github_natanbc_nativeloader_natives_LinuxNatives_getauxval(
+    JNIEnv* env, jclass thiz, jlong type
 ) {
     (void)env;
     (void)thiz;
     if(!getauxval) {
         return 0;
     }
-    return (jint)getauxval((unsigned long)type);
+    return (jlong)getauxval((unsigned long)type);
 }
