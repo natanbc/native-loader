@@ -71,7 +71,7 @@ class LinuxArm {
             feature(ArmFeature.CRC32,     AT_HWCAP2, ARM_HWCAP2_CRC32)
     );
     
-    static Arm.CpuID readArmCpuID() {
+    static Arm.CpuID readCpuID() {
         var cpuid = new Arm.CpuID();
         try(var reader = Files.newBufferedReader(Path.of("/proc/cpuinfo"), StandardCharsets.UTF_8)) {
             String line;
@@ -136,7 +136,7 @@ class LinuxArm {
             }
         }
         
-        var cpuid = readArmCpuID();
+        var cpuid = readCpuID();
         if(cpuid.implementer == 0x41 && cpuid.variant == 0x0 && cpuid.part == 0xC08 && cpuid.revision == 0x0) {
             if(cpuid.architecture >= 7 && cpuid.goldfish) {
                 features.add(ArmFeature.IDIVA);

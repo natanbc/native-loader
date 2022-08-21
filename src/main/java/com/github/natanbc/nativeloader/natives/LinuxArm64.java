@@ -2,8 +2,13 @@ package com.github.natanbc.nativeloader.natives;
 
 import com.github.natanbc.nativeloader.arm64.Arm64Feature;
 
+import java.io.IOException;
 import java.lang.annotation.Native;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 
 import static com.github.natanbc.nativeloader.natives.LinuxNatives.*;
 
@@ -121,6 +126,58 @@ class LinuxArm64 {
             feature(Arm64Feature.AFP,        AT_HWCAP2, ARM64_HWCAP2_AFP),
             feature(Arm64Feature.RPRES,      AT_HWCAP2, ARM64_HWCAP2_RPRES)
     );
+    
+    static Arm64.CpuID readCpuID() {
+        var cpuid = new Arm64.CpuID();
+        try(var reader = Files.newBufferedReader(Path.of("/proc/cpuinfo"), StandardCharsets.UTF_8)) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                var nameValue = line.split(":");
+                if(nameValue.length != 2) continue;
+                switch(nameValue[0].strip()) {
+                    case "CPU implementer":
+                        cpuid.implementer = Integer.parseUnsignedInt(nameValue[1].strip());
+                        break;
+                    case "CPU variant":
+                        cpuid.variant = Integer.parseUnsignedInt(nameValue[1].strip());
+                        break;
+                    case "CPU part":
+                        cpuid.part = Integer.parseUnsignedInt(nameValue[1].strip());
+                        break;
+                    case "CPU revision":
+                        cpuid.revision = Integer.parseUnsignedInt(nameValue[1].strip());
+                        break;
+                }
+            }
+        } catch(IOException ignored) {}
+        
+        return cpuid;
+    }
+    
+    static void addFeatures(Set<Arm64Feature> features) {
+        try(var reader = Files.newBufferedReader(Path.of("/proc/cpuinfo"), StandardCharsets.UTF_8)) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                var nameValue = line.split(":");
+                if(nameValue.length != 2) continue;
+                if(!nameValue[0].strip().equals("Features")) continue;
+                for(var featureName : nameValue[1].split(" ")) {
+                    var info = arm64Map.get(featureName);
+                    if(info != null) {
+                        features.add(info.feature);
+                    }
+                }
+            }
+        } catch(IOException ignored) {}
+        var hwcap = getauxval(AT_HWCAP);
+        var hwcap2 = getauxval(AT_HWCAP2);
+        for(var info : arm64Map.values()) {
+            var cap = info.hwcap == AT_HWCAP ? hwcap : hwcap2;
+            if((cap & info.hwcapBit) == info.hwcapBit) {
+                features.add(info.feature);
+            }
+        }
+    }
     
     private static Map.Entry<String, Arm64FeatureInfo> feature(Arm64Feature feature, int hwcap, int hwcapBit) {
         return Map.entry(feature.nativeName(), new Arm64FeatureInfo(feature, hwcap, hwcapBit));
